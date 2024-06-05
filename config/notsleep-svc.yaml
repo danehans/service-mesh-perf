@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    istio.io/use-waypoint: static-waypoint
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"notsleep","service":"notsleep"},"name":"notsleep","namespace":"default"},"spec":{"ports":[{"name":"http","port":80}],"selector":{"app":"notsleep"}}}
+  creationTimestamp: "2024-06-04T19:11:34Z"
+  labels:
+    app: notsleep
+    istio.io/use-waypoint: static-waypoint
+    service: notsleep
+  name: notsleep
+  namespace: default
+  resourceVersion: "1307006"
+  uid: 0b937d37-69d6-41fd-8ef2-05a3a0d23203
+spec:
+  clusterIP: 10.100.62.28
+  clusterIPs:
+  - 10.100.62.28
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: notsleep
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

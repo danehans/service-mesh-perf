@@ -1,0 +1,39 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"gateway.networking.k8s.io/v1","kind":"Gateway","metadata":{"annotations":{},"name":"static-waypoint","namespace":"default"},"spec":{"addresses":[{"type":"IPAddress","value":"10.100.128.128"}],"gatewayClassName":"static-waypoint","listeners":[{"name":"proxy","port":15088,"protocol":"PROXY"}]}}
+  creationTimestamp: "2024-06-04T16:51:06Z"
+  generation: 1
+  name: static-waypoint
+  namespace: default
+  resourceVersion: "1175222"
+  uid: bb88567c-427e-4b76-8fe7-b7d4c538547b
+spec:
+  addresses:
+  - type: IPAddress
+    value: 10.100.128.128
+  gatewayClassName: static-waypoint
+  listeners:
+  - allowedRoutes:
+      namespaces:
+        from: Same
+    name: proxy
+    port: 15088
+    protocol: PROXY
+status:
+  addresses:
+  - type: IPAddress
+    value: 10.100.128.128
+  conditions:
+  - lastTransitionTime: "1970-01-01T00:00:00Z"
+    message: Waiting for controller
+    reason: Pending
+    status: Unknown
+    type: Accepted
+  - lastTransitionTime: "1970-01-01T00:00:00Z"
+    message: Waiting for controller
+    reason: Pending
+    status: Unknown
+    type: Programmed

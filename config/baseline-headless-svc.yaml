@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"baseline","service":"baseline"},"name":"baseline-headless","namespace":"default"},"spec":{"clusterIP":"None","ports":[{"name":"http","port":9080,"targetPort":9080}],"selector":{"app":"baseline"}}}
+  creationTimestamp: "2024-06-04T21:07:04Z"
+  labels:
+    app: baseline
+    service: baseline
+  name: baseline-headless
+  namespace: default
+  resourceVersion: "1224864"
+  uid: 1654397a-483b-47cc-97dc-1407a9a38ef1
+spec:
+  clusterIP: None
+  clusterIPs:
+  - None
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 9080
+    protocol: TCP
+    targetPort: 9080
+  selector:
+    app: baseline
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

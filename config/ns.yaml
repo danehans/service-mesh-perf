@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: "2024-05-30T20:36:56Z"
+  labels:
+    istio.io/dataplane-mode: ambient
+    kubernetes.io/metadata.name: default
+  name: default
+  resourceVersion: "1258282"
+  uid: f3f1cedd-7891-45a0-811d-42ef54930781
+spec:
+  finalizers:
+  - kubernetes
+status:
+  phase: Active

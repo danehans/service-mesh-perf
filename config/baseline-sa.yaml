@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"ServiceAccount","metadata":{"annotations":{},"labels":{"app":"baseline"},"name":"baseline","namespace":"default"}}
+  creationTimestamp: "2024-06-03T17:16:53Z"
+  labels:
+    app: baseline
+  name: baseline
+  namespace: default
+  resourceVersion: "901034"
+  uid: fa4dbfc8-970c-4ed8-b7f4-859db9154d1b

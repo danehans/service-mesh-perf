@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "3"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"static-waypoint","namespace":"default"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"static-waypoint"}},"template":{"metadata":{"labels":{"app":"static-waypoint","gateway.networking.k8s.io/gateway-name":"static-waypoint"}},"spec":{"containers":[{"command":["envoy","--config-path","/etc/envoy/envoy.yaml","--drain-strategy","immediate","--local-address-ip-version","v4","--file-flush-interval-msec","1000"],"image":"docker.io/istio/proxyv2:1.22.0-distroless","name":"static-waypoint","ports":[{"containerPort":5201}],"volumeMounts":[{"mountPath":"/etc/envoy","name":"static-waypoint-config"}]}],"nodeName":"ambient-control-plane","volumes":[{"configMap":{"name":"static-waypoint-config"},"name":"static-waypoint-config"}]}}}}
+  creationTimestamp: "2024-06-04T17:16:25Z"
+  generation: 9
+  name: static-waypoint
+  namespace: default
+  resourceVersion: "1445422"
+  uid: acbed7d0-10f0-49d0-a431-9c06367b3625
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: static-waypoint
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: static-waypoint
+        gateway.networking.k8s.io/gateway-name: static-waypoint
+    spec:
+      containers:
+      - command:
+        - envoy
+        - --config-path
+        - /etc/envoy/envoy.yaml
+        - --drain-strategy
+        - immediate
+        - --local-address-ip-version
+        - v4
+        - --file-flush-interval-msec
+        - "1000"
+        image: docker.io/istio/proxyv2:1.22.0-distroless
+        imagePullPolicy: IfNotPresent
+        name: static-waypoint
+        ports:
+        - containerPort: 5201
+          protocol: TCP
+        - containerPort: 15000
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/envoy
+          name: static-waypoint-config
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: static-waypoint-config
+        name: static-waypoint-config
+status:
+  availableReplicas: 1
+  conditions:
+  - lastTransitionTime: "2024-06-05T03:24:01Z"
+    lastUpdateTime: "2024-06-05T03:24:01Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
+    type: Available
+  - lastTransitionTime: "2024-06-04T17:16:25Z"
+    lastUpdateTime: "2024-06-05T16:03:54Z"
+    message: ReplicaSet "static-waypoint-849fb9f6f4" has successfully progressed.
+    reason: NewReplicaSetAvailable
+    status: "True"
+    type: Progressing
+  observedGeneration: 9
+  readyReplicas: 1
+  replicas: 1
+  updatedReplicas: 1

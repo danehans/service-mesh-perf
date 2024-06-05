@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"httpbin","service":"httpbin"},"name":"httpbin-headless","namespace":"default"},"spec":{"clusterIP":"None","ports":[{"name":"http","port":8000,"targetPort":8080}],"selector":{"app":"httpbin"}}}
+  creationTimestamp: "2024-06-04T17:25:01Z"
+  labels:
+    app: httpbin
+    service: httpbin
+  name: httpbin-headless
+  namespace: default
+  resourceVersion: "1181772"
+  uid: acd7d7db-d3cf-4e5f-9cfb-5d290d76cdbc
+spec:
+  clusterIP: None
+  clusterIPs:
+  - None
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: http
+    port: 8000
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: httpbin
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

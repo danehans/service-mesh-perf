@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"ServiceAccount","metadata":{"annotations":{},"name":"notsleep","namespace":"default"}}
+  creationTimestamp: "2024-06-04T19:11:34Z"
+  name: notsleep
+  namespace: default
+  resourceVersion: "1202449"
+  uid: 6f4aa244-0de2-4844-a6f3-bda05d171e4d

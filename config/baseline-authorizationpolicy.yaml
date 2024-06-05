@@ -1,0 +1,27 @@
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"security.istio.io/v1beta1","kind":"AuthorizationPolicy","metadata":{"annotations":{},"name":"baseline","namespace":"default"},"spec":{"action":"ALLOW","rules":[{"from":[{"source":{"principals":["cluster.local/ns/default/sa/load"]}}],"to":[{"operation":{"methods":["GET"]}}]}],"targetRefs":[{"group":"","kind":"Service","name":"baseline"}]}}
+  creationTimestamp: "2024-06-04T21:53:31Z"
+  generation: 5
+  name: baseline
+  namespace: default
+  resourceVersion: "1303619"
+  uid: c3264076-6007-47ad-8135-8c2caedb024a
+spec:
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals:
+        - cluster.local/ns/default/sa/load
+    to:
+    - operation:
+        methods:
+        - GET
+  targetRefs:
+  - group: ""
+    kind: Service
+    name: baseline
