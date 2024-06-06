@@ -1,6 +1,8 @@
 # Introduction
 
-Service meshes provide essential capabilities for managing microservices traffic, including security, observability, and traffic management. However, these features often come with performance trade-offs. This project explores the performance impact of different service mesh configurations. Specifically, we will compare [Istio](https://istio.io/) ambient mode. Ambient mode is a newer approach designed to reduce the overhead associated with the sidecar pattern.
+Service meshes provide essential capabilities for managing microservices traffic, including security, observability, and traffic management. However, these features often come with performance trade-offs. This project explores the performance impact of different service mesh configurations. Specifically, we compare [TODO].
+
+Ambient mode is a newer approach designed to reduce the overhead associated with the sidecar pattern.
 
 ## Test Environment
 
@@ -9,12 +11,13 @@ A two node [EKS](https://aws.amazon.com/eks/) Kubernetes cluster was used as the
 To generate consistent and realistic load, [Nighthawk](https://github.com/envoyproxy/nighthawk) is used as the load generator with the following configuration:
 
 * Nighthawk-http-server & Nighthawk client were deployed on separate nodes.
-* Load Rate: 160, 1,600, and 16,000 Requests Per Second (RPS).
+* Load Rate: 1000, 5000, 10000, and 30000 Requests Per Second (RPS).
+* Nighthawk concurrency is set to match the number of COU cores of cluster nodes.
 * [TODO] Add configured resource requests and limits.
 
 ## Test Configuration
 
-Three different Istio Ambient mode configuration were tested:
+Three different Istio Ambient mode configurations were tested:
 
 *mTLS only: mTLS between ztunnel node proxies.
 *mTLS with L4 auth policy: A layer 4 [authorization policy]() is added to control access between nighthawk client and server workload based on identities.
@@ -22,7 +25,7 @@ Three different Istio Ambient mode configuration were tested:
 
 ## Test Results
 
-**160 RPS Nighthawk Configuration:** `Time=60s, Requests Per Second=10, Concurrent Connections=10, Concurrency=16, Number of Runs=5`
+**1000 RPS Nighthawk Configuration:** `Time=60s, Requests Per Second=125, Concurrent Connections=10, Concurrency=8, Number of Runs=5`
 
 | Configuration  | 50th Percentile Latency | 75th Percentile Latency | 95th Percentile Latency | 99th Percentile Latency |
 | -------------- | ----------------------- | ----------------------- | ----------------------- | ----------------------- |
@@ -37,7 +40,7 @@ Below is a graph summarizing the latency impacts for this configuration:
 
 ![Service Mesh Latency Comparison](images/gke-450rps.png)
 
-**1,600 RPS Nighthawk Configuration:** `Time=60s, Requests Per Second=100, Concurrent Connections=10, Concurrency=16, Number of Runs=5`
+**5000 RPS Nighthawk Configuration:** `Time=60s, Requests Per Second=625, Concurrent Connections=10, Concurrency=8, Number of Runs=5`
 
 | Configuration  | 50th Percentile Latency | 75th Percentile Latency | 95th Percentile Latency | 99th Percentile Latency |
 | -------------- | ----------------------- | ----------------------- | ----------------------- | ----------------------- |
@@ -284,24 +287,10 @@ kubectl exec $(kubectl get pods -l app=client -o custom-columns=:.metadata.name 
 
 ### Baseline Test
 
-Before installing Istio, create a baseline by running the following tests:
-
-Run the 160 rps test:
+Before installing Istio, create a baseline by running the tests:
 
 ```sh
-kubectl exec $(kubectl get pods -l app=client -o custom-columns=:.metadata.name --no-headers) -c nighthawk -- nighthawk_client --duration 60 --rps 10 --connections 10 --concurrency 16 -v info http://server:9080/ | sleep 120
-```
-
-Run the 1,600 rps test:
-
-```sh
-kubectl exec $(kubectl get pods -l app=client -o custom-columns=:.metadata.name --no-headers) -c nighthawk -- nighthawk_client --duration 60 --rps 100 --connections 10 --concurrency 16 -v info http://server:9080/ | sleep 120
-```
-
-Run the 16,000 rps test:
-
-```sh
-kubectl exec $(kubectl get pods -l app=client -o custom-columns=:.metadata.name --no-headers) -c nighthawk -- nighthawk_client --duration 60 --rps 1000 --connections 10 --concurrency 16 -v info http://server:9080/ | sleep 120
+NAME=baseline ./scripts/run-tests.sh
 ```
 
 ### Ambient mTLS Test
@@ -315,10 +304,16 @@ Install Istio:
 Label the default namespace:
 
 ```sh
-
+kubectl label namespace default istio.io/dataplane-mode=ambient --overwrite
 ```
 
-The default namespace is now secured using mTLS. Rerun the same tests from the baseline test section.
+The default namespace is now secured using mTLS.
+
+Rerun the same tests from the baseline test section:
+
+```sh
+NAME=ambient-mtls ./scripts/run-tests.sh
+```
 
 ### Ambient L4 Authorization Policy Test
 
@@ -343,7 +338,11 @@ spec:
 EOF
 ```
 
-Rerun the same tests from the baseline test section.
+Rerun the same tests from the baseline test section:
+
+```sh
+NAME=ambient-l4-auth ./scripts/run-tests.sh
+```
 
 ### Ambient L7 Authorization Policy Test
 
@@ -364,7 +363,11 @@ kubectl label svc/client istio.io/use-waypoint=static-waypoint --overwrite
 kubectl label svc/server istio.io/use-waypoint=static-waypoint --overwrite
 ```
 
-Rerun the same tests from the baseline test section.
+Rerun the same tests from the baseline test section:
+
+```sh
+NAME=ambient-l7-auth ./scripts/run-tests.sh
+```
 
 ## Conclusion
 
